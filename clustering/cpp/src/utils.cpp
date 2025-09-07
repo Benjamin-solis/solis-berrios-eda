@@ -49,3 +49,19 @@ void print_array(const float *array, size_t d){
     }
     std::cout<< std::endl;
 }
+
+size_t argsort(const float *array, size_t d){
+    float A;
+    for(i=0; i < d; i++){ //Array de posiciones
+        A[i] = i;
+    }
+
+    for(i=1; i <= n; i++){
+        int j = i-1;
+        while((array[A[j]] < array[A[i]]) && 0<j){
+            A[j+1] = A[j];
+            j--;
+        }
+        A[j+1] =  A[i];
+    }
+}
