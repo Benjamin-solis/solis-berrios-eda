@@ -1,6 +1,7 @@
 #include "utils.hpp"
 #include <cmath>
 #include <iostream>
+#include <cstdlib>
 
 float vec_compute_distance(const float* u, const float* v, size_t dim){
     float d = 0;
@@ -50,18 +51,26 @@ void print_array(const float *array, size_t d){
     std::cout<< std::endl;
 }
 
-size_t argsort(const float *array, size_t d){
-    float A;
-    for(i=0; i < d; i++){ //Array de posiciones
-        A[i] = i;
-    }
+size_t *argsort(const float *array, size_t d) {
+    if (!array || d == 0) return NULL;
 
-    for(i=1; i <= n; i++){
-        int j = i-1;
-        while((array[A[j]] < array[A[i]]) && 0<j){
-            A[j+1] = A[j];
+    size_t *A = (size_t*)malloc(d * sizeof *A);
+    if (!A) return NULL;
+
+    for (size_t i = 0; i < d; i++) A[i] = i;
+
+    for (size_t i = 1; i < d; i++) {
+        size_t key_idx = A[i];
+        float  key_val = array[key_idx];
+        long j = (long)i - 1;
+        while (j >= 0 && array[A[j]] > key_val) {
+            A[j + 1] = A[j];
             j--;
         }
-        A[j+1] =  A[i];
+        A[j + 1] = key_idx;
+
     }
+    free(A);
+    return A;
+
 }
