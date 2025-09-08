@@ -44,16 +44,12 @@ std::vector<std::size_t> SimSearch::search_with_clusters(const float* query, std
         }
     }
     
-    // Crear un Cluster temporal para obtener los índices del mejor cluster
     Cluster temp_cluster(mat_data, mat_clusters.getN());
     temp_cluster.compute_clusters();
     
-    // Obtener los índices de vectores en el cluster más cercano
     std::vector<std::size_t> cluster_indices = temp_cluster.getInds(best_cluster);
     
-    // Si no hay suficientes vectores en el cluster, buscar en clusters adyacentes
     if(cluster_indices.size() < top_k){
-        // Calcular distancias a todos los clusters y ordenarlos
         std::vector<std::pair<float, std::size_t>> cluster_distances;
         for(std::size_t i = 0; i < mat_clusters.getN(); i++){
             const float* centroid = mat_clusters.getRow(i);
