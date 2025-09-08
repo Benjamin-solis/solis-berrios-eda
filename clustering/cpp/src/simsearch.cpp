@@ -26,12 +26,10 @@ std::vector<std::size_t> SimSearch::search_without(const float* query, std::size
         const float* row = mat_data.getRow(i);
         dist[i] = dis(query,  row);
     }
-<<<<<<< HEAD
     return {};
     }
 
 std::vector<std::size_t> SimSearch::search_with_clusters(const float* query, std::size_t top_k) const{
-    // Primero encontrar el cluster más cercano al query
     float min_cluster_dist = std::numeric_limits<float>::max();
     std::size_t best_cluster = 0;
     
@@ -42,18 +40,13 @@ std::vector<std::size_t> SimSearch::search_with_clusters(const float* query, std
             min_cluster_dist = dist;
             best_cluster = i;
         }
-    }
-    
-    // Crear un Cluster temporal para obtener los índices del mejor cluster
+    }  
     Cluster temp_cluster(mat_data, mat_clusters.getN());
     temp_cluster.compute_clusters();
     
-    // Obtener los índices de vectores en el cluster más cercano
     std::vector<std::size_t> cluster_indices = temp_cluster.getInds(best_cluster);
     
-    // Si no hay suficientes vectores en el cluster, buscar en clusters adyacentes
     if(cluster_indices.size() < top_k){
-        // Calcular distancias a todos los clusters y ordenarlos
         std::vector<std::pair<float, std::size_t>> cluster_distances;
         for(std::size_t i = 0; i < mat_clusters.getN(); i++){
             const float* centroid = mat_clusters.getRow(i);
@@ -63,7 +56,6 @@ std::vector<std::size_t> SimSearch::search_with_clusters(const float* query, std
         
         std::sort(cluster_distances.begin(), cluster_distances.end());
         
-        // Expandir búsqueda a clusters más cercanos hasta tener suficientes vectores
         cluster_indices.clear();
         for(const auto& cluster_pair : cluster_distances){
             std::vector<std::size_t> current_cluster_indices = temp_cluster.getInds(cluster_pair.second);
@@ -72,7 +64,6 @@ std::vector<std::size_t> SimSearch::search_with_clusters(const float* query, std
         }
     }
     
-    // Calcular distancias solo para los vectores en los clusters seleccionados
     std::vector<std::pair<float, std::size_t>> candidate_distances;
     for(std::size_t idx : cluster_indices){
         const float* row = mat_data.getRow(idx);
@@ -80,10 +71,8 @@ std::vector<std::size_t> SimSearch::search_with_clusters(const float* query, std
         candidate_distances.push_back({dist, idx});
     }
     
-    // Ordenar por distancia
     std::sort(candidate_distances.begin(), candidate_distances.end());
     
-    // Retornar los top_k primeros
     std::vector<std::size_t> result;
     for(std::size_t i = 0; i < std::min(top_k, candidate_distances.size()); i++){
         result.push_back(candidate_distances[i].second);
@@ -92,13 +81,3 @@ std::vector<std::size_t> SimSearch::search_with_clusters(const float* query, std
     return result;
 }
     
-=======
-
-    std::size_t *indice = argsort(dist.data(), mat_data.getN());
-
-
-    std::vector<size_t> fin(indice, indice + top_k);
-    free(indice);
-    return fin;
-}
->>>>>>> b547aa77595d096f19a5792b5932d9a8664d9ecb
