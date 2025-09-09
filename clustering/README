@@ -1,0 +1,4 @@
+Para utilizar nuestro código, se realizó un archivo Makefile (para usuario de Máquina Virtual) para facilitar la compilación.
+El archivo Makefile viene con las reglas predeterminadas para su uso, tales como make, make run y make clean
+
+Para compilar el archivo, debe de dirigirse a la carpeta de Clustering/cpp y ejecutar el siguiente comando: make run
